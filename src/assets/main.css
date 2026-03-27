@@ -216,3 +216,495 @@ body {
     background-color: #222222;
   }
 }
+
+/* ─── Каталог — сетка карточек ─────────────────────────────── */
+.products-status {
+  margin-top: 40px;
+  font-size: 18px;
+  color: #666;
+}
+
+.products-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 24px;
+}
+
+.product-card {
+  background: #fff;
+  border-radius: 24px;
+  overflow: hidden;
+  text-align: left;
+  cursor: pointer;
+  border: none;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+  box-shadow: 1px 2px 20px 1px rgba(0, 0, 0, 0.05);
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.12);
+}
+
+.product-card__image-wrap {
+  width: 100%;
+  aspect-ratio: 4/3;
+  overflow: hidden;
+  background: #f5f5f5;
+}
+
+.product-card__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.product-card__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-size: 14px;
+}
+
+.product-card__name {
+  padding: 16px 20px;
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+/* ─── Попап ─────────────────────────────────────────────────── */
+.popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.popup {
+  position: relative;
+  background: #fff;
+  border-radius: 32px;
+  max-width: 900px;
+  width: 100%;
+  max-height: 90vh;
+  overflow-y: auto;
+}
+
+.popup__close {
+  position: sticky;
+  top: 16px;
+  float: right;
+  margin: 16px 16px 0 0;
+  width: 40px;
+  height: 40px;
+  border-radius: 999px;
+  background: #f0f0f0;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0;
+  flex-shrink: 0;
+  z-index: 1;
+}
+
+.popup__close span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: #222;
+  border-radius: 2px;
+  position: absolute;
+}
+
+.popup__close span:first-child {
+  transform: rotate(45deg);
+}
+.popup__close span:last-child {
+  transform: rotate(-45deg);
+}
+
+.popup__inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  padding: 32px;
+}
+
+.popup__image-wrap {
+  border-radius: 20px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  background: #f5f5f5;
+}
+
+.popup__image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.popup__image-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+}
+
+.popup__content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.popup__name {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.popup__description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #444;
+}
+
+.popup__section-title {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #888;
+  margin-bottom: 8px;
+}
+
+.popup__zones {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.popup__zones li {
+  padding-left: 16px;
+  position: relative;
+  font-size: 15px;
+}
+
+.popup__zones li::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 8px;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: #222;
+}
+
+.popup__note {
+  font-size: 14px;
+  color: #888;
+  border-left: 3px solid #e0e0e0;
+  padding-left: 12px;
+  line-height: 1.5;
+}
+
+.popup__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: auto;
+}
+
+.popup__actions .button {
+  min-width: unset;
+  height: 52px;
+  padding-inline: 20px;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+@media (max-width: 640px) {
+  .popup__inner {
+    grid-template-columns: 1fr;
+    padding: 20px;
+    gap: 20px;
+  }
+
+  .popup__name {
+    font-size: 22px;
+  }
+}
+
+/* ─── Стили административной панели ────────────────────────── */
+.admin-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #efefef;
+  padding: 20px;
+}
+
+.admin-login__form {
+  background: #fff;
+  border-radius: 32px;
+  padding: 40px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.admin-login__title {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.admin-panel {
+  min-height: 100vh;
+  background: #efefef;
+}
+
+.admin-header {
+  background: #fff;
+  padding: 16px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.admin-header__title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 20px;
+}
+
+.admin-toolbar {
+  margin-bottom: 20px;
+}
+
+.admin-status {
+  padding: 32px 0;
+  color: #888;
+  font-size: 16px;
+}
+
+.admin-error {
+  color: #c0392b;
+  font-size: 14px;
+}
+
+.admin-table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #fff;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.05);
+}
+
+.admin-table th,
+.admin-table td {
+  padding: 14px 16px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  font-size: 15px;
+}
+
+.admin-table th {
+  background: #f8f8f8;
+  font-weight: 700;
+  font-size: 13px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #888;
+}
+
+.admin-table__thumb {
+  width: 60px;
+  height: 48px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.admin-table__actions {
+  display: flex;
+  gap: 8px;
+}
+
+.admin-btn-edit,
+.admin-btn-delete {
+  padding: 6px 14px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  border: none;
+}
+
+.admin-btn-edit {
+  background: #222;
+  color: #fff;
+}
+.admin-btn-delete {
+  background: #fee2e2;
+  color: #c0392b;
+}
+
+.admin-link {
+  color: #2563eb;
+  text-decoration: underline;
+  font-size: 14px;
+}
+
+.admin-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  z-index: 200;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+
+.admin-form {
+  background: #fff;
+  border-radius: 28px;
+  padding: 32px;
+  width: 100%;
+  max-width: 560px;
+  max-height: 90vh;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.admin-form__title {
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.admin-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.admin-input {
+  padding: 10px 14px;
+  border: 1px solid #d9d9d9;
+  border-radius: 12px;
+  font-size: 15px;
+  outline: none;
+  width: 100%;
+  transition: border-color 0.15s;
+  font-family: inherit;
+}
+
+.admin-input:focus {
+  border-color: #222;
+}
+
+.admin-textarea {
+  resize: vertical;
+  min-height: 72px;
+}
+
+.admin-zone-row {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.admin-zone-remove {
+  flex-shrink: 0;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  background: #fff;
+  cursor: pointer;
+  font-size: 14px;
+  margin-top: 4px;
+}
+
+.admin-btn-add-zone {
+  background: none;
+  border: 1px dashed #999;
+  border-radius: 10px;
+  padding: 7px 14px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: #555;
+}
+
+.admin-upload {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.admin-upload__preview {
+  max-height: 140px;
+  border-radius: 12px;
+  object-fit: cover;
+  width: 100%;
+}
+
+.admin-upload__label {
+  padding: 10px 14px;
+  border: 1px dashed #999;
+  border-radius: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #555;
+  font-weight: 400;
+}
+
+.admin-upload__input {
+  display: none;
+}
+
+.admin-form__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  padding-top: 8px;
+}
+
+.admin-form__footer .button {
+  min-width: unset;
+  height: 48px;
+  padding-inline: 20px;
+  font-size: 15px;
+}

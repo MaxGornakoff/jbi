@@ -1,0 +1,16 @@
+# Перенаправлять все запросы (кроме /api и /uploads) на index.html (Vue SPA)
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+
+    # API и uploads отдаём как есть
+    RewriteRule ^api/       - [L]
+    RewriteRule ^uploads/   - [L]
+
+    # Существующие файлы/директории — без изменений
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Всё остальное → Vue SPA
+    RewriteRule . /index.html [L]
+</IfModule>

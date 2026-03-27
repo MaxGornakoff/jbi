@@ -1,5 +1,24 @@
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import { RouterView, useRoute } from 'vue-router'
+import { useProductsStore } from '@/stores/products'
+import ProductCard from '@/components/ProductCard.vue'
+import ProductPopup from '@/components/ProductPopup.vue'
+
+const productsStore = useProductsStore()
+const route = useRoute()
+const isRootRoute = computed(() => route.path === '/')
+const activeProductId = ref<number | null>(null)
+const activeProduct = computed(
+  () => productsStore.products.find((p) => p.id === activeProductId.value) ?? null,
+)
+
+function openProduct(id: number) {
+  activeProductId.value = id
+}
+function closeProduct() {
+  activeProductId.value = null
+}
 
 const isMobileMenuOpen = ref(false)
 const menuControlRef = ref<HTMLElement | null>(null)
@@ -23,6 +42,7 @@ const handleDocumentClick = (event: MouseEvent) => {
 
 onMounted(() => {
   document.addEventListener('click', handleDocumentClick)
+  productsStore.fetchProducts()
 })
 
 onBeforeUnmount(() => {
@@ -31,7 +51,9 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
+  <RouterView v-if="!isRootRoute" />
   <div
+    v-else
     class="min-h-screen bg-[#EFEFEF] px-13.75 pt-6 max-[1500px]:px-7.5 max-[640px]:px-3 max-[640px]:pt-3"
   >
     <header class="bg-white rounded-[50px] max-w-452.5 mx-auto">
@@ -246,6 +268,17 @@ onBeforeUnmount(() => {
           Нажмите на категорию, чтобы запросить расчет стоимости или скачать спецификацию
         </p>
         <div id="products"></div>
+
+        <!-- Сетка карточек -->
+        <div v-if="productsStore.loading" class="products-status">Загрузка каталога...</div>
+        <div v-else-if="productsStore.products.length" class="products-grid mt-10">
+          <ProductCard
+            v-for="product in productsStore.products"
+            :key="product.id"
+            :product="product"
+            @open="openProduct"
+          />
+        </div>
       </section>
 
       <section id="services" class="mx-auto max-w-6xl px-6 py-16">
@@ -271,4 +304,10 @@ onBeforeUnmount(() => {
       </div>
     </footer>
   </div>
+
+  <ProductPopup
+    v-if="isRootRoute && activeProduct"
+    :product="activeProduct"
+    @close="closeProduct"
+  />
 </template>
