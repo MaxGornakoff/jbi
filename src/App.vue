@@ -93,7 +93,7 @@ onBeforeUnmount(() => {
               </li>
               <li>
                 <a
-                  href="#advantages"
+                  href="#benefits"
                   class="hover:text-cyan-400 text-[16px] font-semibold"
                   @click="closeMobileMenu"
                   >Преимущества</a
@@ -262,16 +262,28 @@ onBeforeUnmount(() => {
         </div>
       </section>
 
-      <section id="catalog" class="mx-auto max-w-420 mt-20">
-        <h2 class="mb-6 text-[52px] font-semibold">Каталог продукции</h2>
-        <p class="max-w-147.5 text-[18px] font-medium">
+      <section
+        id="catalog"
+        class="mx-auto max-w-420 mt-20 max-[640px]:mt-10 max-[640px]:max-w-full"
+      >
+        <h2
+          class="leading-none mb-6 text-[52px] font-semibold max-[1500px]:text-[36px] max-[640px]:text-[28px] max-[640px]:mb-4"
+        >
+          Каталог продукции
+        </h2>
+        <p class="max-w-147.5 text-[18px] font-medium max-[640px]:text-[16px]">
           Нажмите на категорию, чтобы запросить расчет стоимости или скачать спецификацию
         </p>
-        <div id="products"></div>
 
         <!-- Сетка карточек -->
-        <div v-if="productsStore.loading" class="products-status">Загрузка каталога...</div>
-        <div v-else-if="productsStore.products.length" class="products-grid mt-10">
+        <div v-if="productsStore.loading" class="mt-16 text-lg text-[#666]">
+          Загрузка каталога...
+        </div>
+        <div
+          id="products"
+          v-else-if="productsStore.products.length"
+          class="mt-16 grid gap-6 [grid-template-columns:repeat(auto-fill,minmax(280px,1fr))] max-[640px]:gap-2 max-[640px]:mt-8 max-[640px]:[grid-template-columns:repeat(auto-fill,minmax(210px,1fr))]"
+        >
           <ProductCard
             v-for="product in productsStore.products"
             :key="product.id"
@@ -279,17 +291,80 @@ onBeforeUnmount(() => {
             @open="openProduct"
           />
         </div>
+        <div class="flex justify-center pt-16 max-[640px]:pt-8">
+          <button class="button button--black m-auto">Связаться с нами</button>
+        </div>
       </section>
 
-      <section id="services" class="mx-auto max-w-6xl px-6 py-16">
-        <h2 class="mb-6 text-2xl font-semibold">Услуги</h2>
-        <div class="grid gap-4 md:grid-cols-3">
-          <article class="rounded-2xl border border-white/10 bg-white/5 p-6">Landing pages</article>
-          <article class="rounded-2xl border border-white/10 bg-white/5 p-6">
-            Vue development
+      <section
+        id="benefits"
+        class="pt-22.5 flex mx-auto max-w-420 gap-8 max-[1024px]:flex-col max-[640px]:pt-10"
+      >
+        <div class="max-w-106.25 max-[1024px]:max-w-full">
+          <h2
+            class="mb-7.5 text-[52px] font-semibold leading-[120%] max-[1500px]:text-[36px] max-[640px]:text-[28px] max-[640px]:mb-4"
+          >
+            Преимущества работы с нами
+          </h2>
+          <p class="text-[18px] font-medium leading-[1.61] max-[640px]:text-[16px]">
+            Прямые поставки ЖБИ от производителя по честным ценам: помогаем экономить бюджет без
+            потери качества, беря на себя все вопросы логистики и комплектации
+          </p>
+        </div>
+        <div class="grid gap-6 grid-cols-3 max-[1500px]:grid-cols-1 max-[640px]:gap-2">
+          <article
+            class="rounded-[50px] bg-white p-7.5 flex flex-col gap-7.5 max-[1500px]:flex-row max-[1500px]:flex-wrap max-[1500px]:gap-4 max-[1500px]:items-center max-[640px]:rounded-[30px] max-[640px]:p-6 max-[640px]:gap-3"
+          >
+            <div>
+              <svg class="h-8 w-8 max-[640px]:h-6 max-[640px]:w-6">
+                <use xlink:href="./assets/sprite.svg#rubl"></use>
+              </svg>
+            </div>
+            <h3
+              class="text-[28px] font-semibold leading-none max-[1500px]:text-[24px] max-[640px]:text-[20px]"
+            >
+              Честная цена
+            </h3>
+            <p class="leading-[1.61]">
+              Работаем без посредников напрямую с производства. Гибкая система скидок для постоянных
+              клиентов и больших объемов.
+            </p>
           </article>
-          <article class="rounded-2xl border border-white/10 bg-white/5 p-6">
-            UI refactoring
+          <article
+            class="rounded-[50px] bg-white p-7.5 flex flex-col gap-7.5 max-[1500px]:flex-row max-[1500px]:flex-wrap max-[1500px]:gap-4 max-[1500px]:items-center max-[640px]:rounded-[30px] max-[640px]:p-6 max-[640px]:gap-4"
+          >
+            <div>
+              <svg class="h-9 w-9 max-[640px]:h-7 max-[640px]:w-7">
+                <use xlink:href="./assets/sprite.svg#futurepay"></use>
+              </svg>
+            </div>
+            <h3
+              class="text-[28px] font-semibold leading-none max-[1500px]:text-[24px] max-[640px]:text-[20px]"
+            >
+              Отсрочка платежа
+            </h3>
+            <p class="leading-[1.61]">
+              Для постоянных партнеров и госзаказчиков предоставляем отсрочку платежа по договору.
+              Работаем с НДС.
+            </p>
+          </article>
+          <article
+            class="rounded-[50px] bg-white p-7.5 flex flex-col gap-7.5 max-[1500px]:flex-row max-[1500px]:flex-wrap max-[1500px]:gap-4 max-[1500px]:items-center max-[640px]:rounded-[30px] max-[640px]:p-6 max-[640px]:gap-4"
+          >
+            <div>
+              <svg class="h-9 w-10 max-[640px]:h-7 max-[640px]:w-8">
+                <use xlink:href="./assets/sprite.svg#gost"></use>
+              </svg>
+            </div>
+            <h3
+              class="text-[28px] font-semibold leading-none max-[1500px]:text-[24px] max-[640px]:text-[20px]"
+            >
+              Соответствие ГОСТ
+            </h3>
+            <p class="leading-[1.61]">
+              Собственная лаборатория, паспорта качества на каждую партию. Все изделия соответствуют
+              требованиям государственных стандартов.
+            </p>
           </article>
         </div>
       </section>
