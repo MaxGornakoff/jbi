@@ -30,6 +30,7 @@ php -S localhost:8000 -t .
 ```powershell
 Invoke-WebRequest http://localhost:8000/api/auth.php -UseBasicParsing | Select-Object -ExpandProperty Content
 Invoke-WebRequest http://localhost:8000/api/products.php -UseBasicParsing | Select-Object -ExpandProperty Content
+Invoke-WebRequest http://localhost:8000/api/site-settings.php -UseBasicParsing | Select-Object -ExpandProperty Content
 ```
 
 ## 4) Запустить фронтенд Vite (в отдельном терминале)
@@ -44,6 +45,7 @@ npm run dev
 - Админка: http://localhost:5173/admin
 - API auth: http://localhost:8000/api/auth.php
 - API products: http://localhost:8000/api/products.php
+- API site settings: http://localhost:8000/api/site-settings.php
 - phpMyAdmin: http://localhost:8081
 
 ## 6) Если не пускает в админку (сброс тестового админа)

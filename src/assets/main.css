@@ -2,6 +2,16 @@
 
 @import './base.css';
 
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
 * {
   box-sizing: border-box;
   color: #222222;
@@ -25,6 +35,39 @@ body {
   width: 100%;
 }
 
+.site-header {
+  position: sticky;
+  top: 12px;
+  z-index: 40;
+  transition:
+    top 0.3s ease,
+    box-shadow 0.3s ease,
+    background-color 0.3s ease,
+    backdrop-filter 0.3s ease;
+}
+
+.site-header > div {
+  transition:
+    padding 0.3s ease,
+    border-radius 0.3s ease;
+}
+
+.site-header--pinned {
+  top: 8px;
+  background-color: rgba(255, 255, 255, 0.92);
+  backdrop-filter: blur(18px);
+  box-shadow: 0 18px 45px rgba(34, 34, 34, 0.08);
+}
+
+.site-header--pinned > div {
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+
+#catalog {
+  scroll-margin-top: 112px;
+}
+
 .button {
   padding-inline: 24px;
   display: inline-flex;
@@ -42,6 +85,10 @@ body {
     min-width: 120px;
     font-size: 14px;
   }
+}
+
+.button-in-page {
+  min-width: 317px;
 }
 
 .button--black {
@@ -69,6 +116,15 @@ body {
 .hero {
   background-image: url('./images/hero.png');
   background-size: cover;
+}
+
+.about-img {
+  background-image: url('./images/about_bg.png');
+  background-size: cover;
+  background-position: top left;
+  @media (max-width: 1500px) {
+    background-position: center;
+  }
 }
 
 .mobile-menu-toggle {
@@ -200,6 +256,23 @@ body {
 }
 
 @media (max-width: 640px) {
+  #catalog {
+    scroll-margin-top: 88px;
+  }
+
+  .site-header {
+    top: 8px;
+  }
+
+  .site-header--pinned {
+    top: 4px;
+  }
+
+  .site-header--pinned > div {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
+
   .advantage {
     display: flex;
     align-items: center;
@@ -215,4 +288,12 @@ body {
     border-radius: 999px;
     background-color: #222222;
   }
+}
+.number {
+  color: white;
+}
+
+.button--edit {
+  color: white;
+  font-weight: 500;
 }

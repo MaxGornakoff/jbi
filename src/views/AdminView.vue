@@ -2,17 +2,54 @@
 import { onMounted, reactive, ref } from 'vue'
 import { useAuthStore } from '@/stores/auth'
 import { useProductsStore, type Product } from '@/stores/products'
+import { useSiteSettingsStore } from '@/stores/siteSettings'
 
 const auth = useAuthStore()
 const store = useProductsStore()
+const siteSettingsStore = useSiteSettingsStore()
 
 // ── авторизация ────────────────────────────────────────────────
 const loginForm = reactive({ email: '', password: '' })
+const contactsForm = reactive({ phone: '', email: '', whatsapp: '', telegram: '', max: '' })
+const contactsError = ref<string | null>(null)
+const contactsSuccess = ref<string | null>(null)
 
 async function submitLogin() {
   await auth.login(loginForm.email, loginForm.password)
   if (auth.isAuthenticated) {
-    await store.fetchProducts()
+    await Promise.all([store.fetchProducts(), siteSettingsStore.fetchSettings()])
+    contactsForm.phone = siteSettingsStore.settings.phone
+    contactsForm.email = siteSettingsStore.settings.email
+    contactsForm.whatsapp = siteSettingsStore.settings.whatsapp
+    contactsForm.telegram = siteSettingsStore.settings.telegram
+    contactsForm.max = siteSettingsStore.settings.max
+  }
+}
+
+function syncContactsForm() {
+  contactsForm.phone = siteSettingsStore.settings.phone
+  contactsForm.email = siteSettingsStore.settings.email
+  contactsForm.whatsapp = siteSettingsStore.settings.whatsapp
+  contactsForm.telegram = siteSettingsStore.settings.telegram
+  contactsForm.max = siteSettingsStore.settings.max
+}
+
+async function submitContacts() {
+  contactsError.value = null
+  contactsSuccess.value = null
+
+  try {
+    await siteSettingsStore.saveSettings({
+      phone: contactsForm.phone,
+      email: contactsForm.email,
+      whatsapp: contactsForm.whatsapp,
+      telegram: contactsForm.telegram,
+      max: contactsForm.max,
+    })
+    syncContactsForm()
+    contactsSuccess.value = 'Контакты сохранены'
+  } catch (e: unknown) {
+    contactsError.value = e instanceof Error ? e.message : 'Ошибка сохранения контактов'
   }
 }
 
@@ -121,7 +158,10 @@ async function confirmDelete(id: number, name: string) {
 // ── инициализация ──────────────────────────────────────────────
 onMounted(async () => {
   await auth.checkAuth()
-  if (auth.isAuthenticated) await store.fetchProducts()
+  if (auth.isAuthenticated) {
+    await Promise.all([store.fetchProducts(), siteSettingsStore.fetchSettings()])
+    syncContactsForm()
+  }
 })
 </script>
 
@@ -175,6 +215,91 @@ onMounted(async () => {
     </header>
 
     <main class="max-w-[1200px] mx-auto px-5 py-8">
+      <section class="mb-6 rounded-[24px] bg-white p-6 shadow-[0_2px_20px_rgba(0,0,0,0.05)]">
+        <div class="flex flex-col gap-1">
+          <h2 class="text-lg font-bold">Контакты сайта</h2>
+          <p class="text-sm text-[#666]">
+            Эти данные используются в шапке, подвале и кнопках связи. Ссылки `tel:` и `mailto:`
+            формируются автоматически.
+          </p>
+        </div>
+
+        <form class="mt-5 grid gap-4 md:grid-cols-2" @submit.prevent="submitContacts">
+          <label class="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Телефон</span>
+            <input
+              v-model="contactsForm.phone"
+              type="text"
+              required
+              placeholder="Например: +7 (918) 654-32-10"
+              class="px-3.5 py-2.5 border border-[#d9d9d9] rounded-xl text-[15px] outline-none w-full transition-colors duration-150 [font-family:inherit] focus:border-[#222]"
+            />
+          </label>
+
+          <label class="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Email</span>
+            <input
+              v-model="contactsForm.email"
+              type="email"
+              required
+              placeholder="Например: sales@example.com"
+              class="px-3.5 py-2.5 border border-[#d9d9d9] rounded-xl text-[15px] outline-none w-full transition-colors duration-150 [font-family:inherit] focus:border-[#222]"
+            />
+          </label>
+
+          <label class="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>WhatsApp <span class="font-normal text-[#888]">(необязательно)</span></span>
+            <input
+              v-model="contactsForm.whatsapp"
+              type="url"
+              placeholder="https://wa.me/79001234567"
+              class="px-3.5 py-2.5 border border-[#d9d9d9] rounded-xl text-[15px] outline-none w-full transition-colors duration-150 [font-family:inherit] focus:border-[#222]"
+            />
+          </label>
+
+          <label class="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Telegram <span class="font-normal text-[#888]">(необязательно)</span></span>
+            <input
+              v-model="contactsForm.telegram"
+              type="url"
+              placeholder="https://t.me/username"
+              class="px-3.5 py-2.5 border border-[#d9d9d9] rounded-xl text-[15px] outline-none w-full transition-colors duration-150 [font-family:inherit] focus:border-[#222]"
+            />
+          </label>
+
+          <label class="flex flex-col gap-1.5 text-sm font-semibold">
+            <span>Max <span class="font-normal text-[#888]">(необязательно)</span></span>
+            <input
+              v-model="contactsForm.max"
+              type="url"
+              placeholder="https://max.ru/..."
+              class="px-3.5 py-2.5 border border-[#d9d9d9] rounded-xl text-[15px] outline-none w-full transition-colors duration-150 [font-family:inherit] focus:border-[#222]"
+            />
+          </label>
+
+          <div
+            class="md:col-span-2 flex items-center justify-between gap-3 max-[640px]:flex-col max-[640px]:items-start"
+          >
+            <div class="flex flex-col gap-1 text-sm">
+              <p v-if="contactsError" class="text-[#c0392b]">{{ contactsError }}</p>
+              <p v-else-if="contactsSuccess" class="text-[#2d7a46]">{{ contactsSuccess }}</p>
+              <p v-else class="text-[#666]">
+                Сейчас на сайте: {{ siteSettingsStore.phoneDisplay }} /
+                {{ siteSettingsStore.emailDisplay }}
+              </p>
+            </div>
+
+            <button
+              type="submit"
+              class="button button--black"
+              :disabled="siteSettingsStore.saving || siteSettingsStore.loading"
+            >
+              {{ siteSettingsStore.saving ? 'Сохранение...' : 'Сохранить контакты' }}
+            </button>
+          </div>
+        </form>
+      </section>
+
       <!-- кнопка добавления -->
       <div class="mb-5">
         <button type="button" class="button button--black" @click="openAddForm">
@@ -249,7 +374,7 @@ onMounted(async () => {
             <td class="px-4 py-3.5 text-left border-b border-[#f0f0f0] text-[15px] flex gap-2">
               <button
                 type="button"
-                class="px-3.5 py-1.5 rounded-lg text-[13px] font-semibold cursor-pointer border-0 bg-[#222] text-white"
+                class="button--admin button--edit px-3.5 py-1.5 rounded-lg text-[13px] font-semibold cursor-pointer border-0 bg-[#222] text-white"
                 @click="openEditForm(p)"
               >
                 Редактировать

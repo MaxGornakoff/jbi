@@ -21,6 +21,19 @@ CREATE TABLE IF NOT EXISTS `products` (
   `updated_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
+CREATE TABLE IF NOT EXISTS `site_settings` (
+  `id`          TINYINT PRIMARY KEY,
+  `phone`       VARCHAR(255) NOT NULL DEFAULT '',
+  `email`       VARCHAR(255) NOT NULL DEFAULT '',
+  `updated_at`  TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+INSERT INTO `site_settings` (`id`, `phone`, `email`)
+VALUES (1, '+7(918)654-32-10', 'hello@example.com')
+ON DUPLICATE KEY UPDATE
+  `phone` = VALUES(`phone`),
+  `email` = VALUES(`email`);
+
 -- !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 -- ВАЖНО: замените email и пароль перед выполнением скрипта
 -- Пароль здесь соответствует строке "changeme123"

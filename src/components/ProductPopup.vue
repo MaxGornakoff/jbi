@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import type { Product } from '@/stores/products'
+import { useSiteSettingsStore } from '@/stores/siteSettings'
 
 defineProps<{ product: Product }>()
 const emit = defineEmits<{ (e: 'close'): void }>()
+const siteSettingsStore = useSiteSettingsStore()
 
 function onBackdropClick(e: MouseEvent) {
   if (e.target === e.currentTarget) emit('close')
@@ -74,7 +76,7 @@ function onBackdropClick(e: MouseEvent) {
 
           <div class="flex flex-wrap gap-3 mt-auto">
             <a
-              href="tel:"
+              :href="siteSettingsStore.phoneHref"
               class="button button--black !min-w-0 !h-[52px] !px-5 !text-[15px] no-underline"
               >Запросить стоимость</a
             >
